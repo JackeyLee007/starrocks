@@ -1220,6 +1220,13 @@ public class Config extends ConfigBase {
     public static long tablet_sched_storage_cooldown_second = -1L; // won't cool down by default
 
     /**
+     * Enable inferring the initial storage medium when creating a table.
+     * If there are both HDD and SSD, and storage_cooldown_second > 0, the storage medium should be SSD
+     */
+    @ConfField(mutable = true)
+    public static boolean enable_infer_table_storage_medium = true;
+
+    /**
      * If the tablet in scheduler queue has not been scheduled for tablet_sched_max_not_being_scheduled_interval_ms,
      * its priority will upgrade.
      * default is 15min

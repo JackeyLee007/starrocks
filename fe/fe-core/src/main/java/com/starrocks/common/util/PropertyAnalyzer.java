@@ -165,10 +165,10 @@ public class PropertyAnalyzer {
     public static final String PROPERTIES_FOREIGN_KEY_CONSTRAINT = "foreign_key_constraints";
     public static final String PROPERTIES_UNIQUE_CONSTRAINT = "unique_constraints";
 
-    public static DataProperty analyzeDataProperty(Map<String, String> properties, DataProperty oldDataProperty)
+    public static DataProperty analyzeDataProperty(Map<String, String> properties, DataProperty defaultDataProperty)
             throws AnalysisException {
         if (properties == null) {
-            return oldDataProperty;
+            return defaultDataProperty;
         }
 
         TStorageMedium storageMedium = null;
@@ -195,8 +195,13 @@ public class PropertyAnalyzer {
             }
         } // end for properties
 
+        if (!hasMedium && defaultDataProperty != null && TStorageMedium.SSD == defaultDataProperty.getStorageMedium()) {
+            hasMedium = true;
+            storageMedium = TStorageMedium.SSD;
+        }
+
         if (!hasCooldown && !hasMedium) {
-            return oldDataProperty;
+            return defaultDataProperty;
         }
 
         properties.remove(PROPERTIES_STORAGE_MEDIUM);
